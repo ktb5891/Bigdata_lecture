@@ -1,26 +1,35 @@
 <?
-$tot = $kor + $eng + $math;
-$avg = $tot/3;
+$tot = $kor + $eng + $math +$soc + $sci;
+$avg = $tot/5;
 
 if($avg >= 90){
-    $grade = "A";
+	$grade = 'A';
 }
 elseif ($avg >= 80){
-    $grade = "B";
+	$grade = 'B';
 }
 elseif($avg >= 70){
-    $grade = "C";
+	$grade = 'C';
 }
 elseif($avg >= 60){
-    $grade = "D";
+	$grade = 'D';
 }
 else{
-    $grade = 'F';
+	$grade = 'F';
 }
 
-echo "국어 : $kor <br>
-영어 : $eng <br>
-수학 : $math <br>
-총점 : $tot <br>
-평균 : $avg <br>
-<h2> 학점 : $grade";
+$connect = mysql_connect("localhost","kimhj","1234");
+mysql_select_db("kimhj_db",$connect);
+$sql = "insert into sungjuk values ('$name', $kor, $eng, $math, $soc, $sci, $tot, $avg, '$grade');";
+
+$result = mysql_query($sql);
+
+if($result){
+	echo "레코드 삽입 완료!";
+}
+else{
+	echo "레코드 삽입 실패! 에러 확인 요망!";
+}
+
+mysql_close($connect);
+?>

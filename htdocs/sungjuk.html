@@ -1,17 +1,21 @@
 <html>
-    <head>
-        <title>
-            성적 계산기
-        </title>
-    </head>
-    <body>
-        <form name = scoreform method=post action="sungjuk.php">
-            <h2>성적을 입력하세요</h2>
-            국어<input name=kor type="text" value=""><br>
-            영어<input name=eng type="text" value=""><br>
-            수학<input name=math type="text" value=""><br>
-            <input type="submit" value="전송">
-            <input type="reset" value="다시">
-        </form>
-    </body>
+<head>
+<title>
+성적 입력
+</title>
+</head>
+<body>
+<form name = user_input method = post action = 'sungjuk.php'>
+	이름 <input name = name type = text value = ""><br>
+	국어 <input name = kor type = text value = ""><br>
+	영어 <input name = eng type = text value = ""><br>
+	수학 <input name = math type = text value = ""><br>
+	사회 <input name = soc type = text value = ""><br>
+	과학 <input name = sci type = text value = ""><br>
+	
+<input name = send type=submit value = "전송">
+<input name = again type=reset value = "재입력">
+</form>
+</body>
 </html>
+	
