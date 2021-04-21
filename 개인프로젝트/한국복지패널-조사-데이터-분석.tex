@@ -1,0 +1,219 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifluatex
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+\author{}
+\date{\vspace{-2.5em}}
+
+\begin{document}
+
+getwd() setwd("C:/Users/ktb58/OneDrive/바탕
+화면/210308/14\_R프로그래밍/개인프로젝트\_복지패널/(2020년 15차
+한국복지패널조사) 데이터(beta1.1)\_spss")
+
+\hypertarget{uxd328uxd0a4uxc9c0-uxc900uxbe44}{%
+\section{패키지 준비}\label{uxd328uxd0a4uxc9c0-uxc900uxbe44}}
+
+library(foreign) library(dplyr) library(ggplot2) library(readxl)
+
+\hypertarget{uxb370uxc774uxd130-uxbd88uxb7ecuxc624uxae30-uxac00uxad6cuxc6a9-uxb370uxc774uxd130}{%
+\section{데이터 불러오기 (가구용
+데이터)}\label{uxb370uxc774uxd130-uxbd88uxb7ecuxc624uxae30-uxac00uxad6cuxc6a9-uxb370uxc774uxd130}}
+
+f = read.spss(file = ``Koweps\_h15\_2020\_beta1.sav'',to.data.frame=T)
+
+\hypertarget{uxb370uxc774uxd130-uxac80uxd1a0}{%
+\section{데이터 검토}\label{uxb370uxc774uxd130-uxac80uxd1a0}}
+
+head(f) View(f) dim(f) str(f) summary(f)
+
+\hypertarget{uxbcc0uxc218uxba85-uxbc14uxafb8uxae30}{%
+\section{변수명 바꾸기}\label{uxbcc0uxc218uxba85-uxbc14uxafb8uxae30}}
+
+welfare = rename(f, region = h15\_reg7, gender = h1501\_4, age =
+h1501\_5, working\_ability = h1503\_2, main\_working\_status = h1503\_4,
+category\_business = h1503\_7 ) '\,'\,' region = 지역 gender = 성별 age
+= 태어난 연도 working\_ability = 근로 능력 main\_working\_status = 주된
+경제활동 참여상태 category\_business = 업종
+
+관광데이터와 연관 가능 부동산 상권과 연관 가능 '\,'\,'
+
+\hypertarget{uxd544uxc694uxd55c-uxbcc0uxc218uxb85cuxb9cc-uxc774uxb8e8uxc5b4uxc9c4-uxb370uxc774uxd130-uxd504uxb808uxc784-uxc0dduxc131}{%
+\section{필요한 변수로만 이루어진 데이터 프레임
+생성}\label{uxd544uxc694uxd55c-uxbcc0uxc218uxb85cuxb9cc-uxc774uxb8e8uxc5b4uxc9c4-uxb370uxc774uxd130-uxd504uxb808uxc784-uxc0dduxc131}}
+
+welfare = data.frame(welfare\(region,  welfare\)gender,
+welfare\(age,  welfare\)working\_ability,
+welfare\(main_working_status,  welfare\)category\_business )
+
+welfare = rename(welfare, region = welfare.region, gender =
+welfare.gender, age = welfare.age, working\_ability =
+welfare.working\_ability, parti\_status = welfare.main\_working\_status,
+business = welfare.category\_business )
+
+\hypertarget{uxb370uxc774uxd130-uxc7acuxac80uxd1a0}{%
+\section{데이터 재검토}\label{uxb370uxc774uxd130-uxc7acuxac80uxd1a0}}
+
+head(welfare) View(welfare) str(welfare) dim(welfare) summary(welfare)
+
+\hypertarget{uxc804uxcc98uxb9ac}{%
+\section{전처리}\label{uxc804uxcc98uxb9ac}}
+
+\hypertarget{uxc9c0uxc5ed}{%
+\section{지역}\label{uxc9c0uxc5ed}}
+
+region =
+c(`서울',`수도권(인천/경기)',`부산/경남/울산',`대구/경북',`대전/충남',`강원/충북',`광주/전남/전북/제주도')
+for (i in 1:7)\{ welfare\(region[welfare\)region == i{]} = region{[}i{]}
+\} \# 성별 welfare\(gender = ifelse(welfare\)gender == 1,`남',`여')
+
+\hypertarget{uxb098uxc774}{%
+\section{나이}\label{uxb098uxc774}}
+
+welfare\(age = 2021-welfare\)age
+
+\hypertarget{uxadfcuxb85c-uxb2a5uxb825-uxc815uxb3c4}{%
+\section{근로 능력 정도}\label{uxadfcuxb85c-uxb2a5uxb825-uxc815uxb3c4}}
+
+ability = c(`만 14세 이하',`근로 가능',`단순 근로 가능', `단순 근로
+미약자',`근로 불가') for (i in 1:5)\{
+welfare\(working_ability[welfare\)working\_ability == i-1{]} =
+ability{[}i{]} \}
+
+\hypertarget{uxc8fcuxb41c-uxacbduxc81cuxd65cuxb3d9-uxcc38uxc5ec-uxc0c1uxd0dc}{%
+\section{주된 경제활동 참여
+상태}\label{uxc8fcuxb41c-uxacbduxc81cuxd65cuxb3d9-uxcc38uxc5ec-uxc0c1uxd0dc}}
+
+status = c(`상용직 임금근로자', `임시직 임금근로자', `일용직
+임금근로자', `자활근로, 공공근로, 노인일자', `고용주', `자영업자',
+`무급가족종사자', `실업자(지난 4주간 적극적으로 구직활동을 함)', `비경제
+활동인구') for (i in 1:9)\{
+welfare\(parti_status[welfare\)parti\_working\_status == i{]} =
+status{[}i{]} \}
+
+\hypertarget{uxc5c5uxc885-uxb300uxbd84uxb958uxb85c-uxc5c5uxc885uxc744-uxbcd1uxd569}{%
+\section{업종 대분류로 업종을
+병합}\label{uxc5c5uxc885-uxb300uxbd84uxb958uxb85c-uxc5c5uxc885uxc744-uxbcd1uxd569}}
+
+business = c(`농업,임업 및 어업',`광업',`제조업',`전기,가스,증기 및 공기
+조절 공급업', `수도,하수 및 폐기물 처리, 원료 재생업',`건설업',`도매 및
+소매업',`운수 및 창고업', `숙박 및
+음식점업',`정보통신업',`부동산업',`전문,과학 및 기술 서비스업',`사업시설
+관리, 사업 지원 및 임대 서비스업', `공공 행정,국방 및 사회보장
+행정',`교육 서비스업',`보건업 및 사회복지 서비스업', `예술,스포츠 및
+여가관련 서비스업',`협회 및 단체, 수리 및 기타 개인 서비스업', `가구 내
+고용활동 및 자가소비 생산활동',`국제 및 외국기관')
+
+welfare\(business[welfare\)business \textless= 3{]} = business{[}1{]}
+welfare\(business[welfare\)business \textless= 8{]} = business{[}2{]}
+welfare\(business[welfare\)business \textless= 34{]} = business{[}3{]}
+welfare\(business[welfare\)business \textless= 35{]} = business{[}4{]}
+welfare\(business[welfare\)business \textless= 39{]} = business{[}5{]}
+welfare\(business[welfare\)business \textless= 42{]} = business{[}6{]}
+welfare\(business[welfare\)business \textless= 47{]} = business{[}7{]}
+welfare\(business[welfare\)business \textless= 52{]} = business{[}8{]}
+welfare\(business[welfare\)business \textless= 56{]} = business{[}9{]}
+welfare\(business[welfare\)business \textless= 63{]} = business{[}10{]}
+welfare\(business[welfare\)business \textless= 68{]} = business{[}11{]}
+welfare\(business[welfare\)business \textless= 73{]} = business{[}12{]}
+welfare\(business[welfare\)business \textless= 76{]} = business{[}13{]}
+welfare\(business[welfare\)business \textless= 84{]} = business{[}14{]}
+welfare\(business[welfare\)business \textless= 85{]} = business{[}15{]}
+welfare\(business[welfare\)business \textless= 87{]} = business{[}16{]}
+welfare\(business[welfare\)business \textless= 91{]} = business{[}17{]}
+welfare\(business[welfare\)business \textless= 96{]} = business{[}18{]}
+welfare\(business[welfare\)business \textless= 98{]} = business{[}19{]}
+welfare\(business[welfare\)business \textless= 99{]} = business{[}20{]}
+
+welfare = welfare \%\textgreater\% filter(!working\_ability == `근로
+불가') welfare = welfare \%\textgreater\% filter(!is.na(business))
+welfare = welfare \%\textgreater\% filter(!parti\_status == `비경제
+활동인구')
+
+\hypertarget{uxc804uxcc98uxb9ac-uxc644uxb8cc}{%
+\section{전처리 완료}\label{uxc804uxcc98uxb9ac-uxc644uxb8cc}}
+
+table(welfare\(region) table(welfare\)gender)
+table(welfare\(age) table(welfare\)working\_ability)
+table(welfare\(parti_status) table(welfare\)business)
+
+Seoul = welfare{[}welfare\$region == `서울',{]} head(Seoul) ggplot(data
+= Seoul, aes(x = age,y = business)) + geom\_point()+ggtitle(``서울의
+연령별 업종 분포'')+ theme(plot.title = element\_text(family =
+``serif'', face = ``bold'', hjust = 0.5, size = 15, color =
+``darkblue''))
+
+Sudogwun = welfare{[}welfare\$region == `수도권(인천/경기)',{]}
+head(Sudogwun) ggplot(data = Sudogwun, aes(x = age,y = business)) +
+geom\_point()+ggtitle(``수도권(인천/경기)의 연령별 업종 분포'')+
+theme(plot.title = element\_text(family = ``serif'', face = ``bold'',
+hjust = 0.5, size = 15, color = ``darkblue''))
+
+Junra\_Jeju = welfare{[}welfare\$region == `광주/전남/전북/제주도',{]}
+head(Junra\_Jeju) ggplot(data = Junra\_Jeju, aes(x = age,y = business))
++ geom\_point()+ggtitle(``광주/전남/전북/제주도의 연령별 업종 분포'')+
+theme(plot.title = element\_text(family = ``serif'', face = ``bold'',
+hjust = 0.5, size = 15, color = ``darkblue''))
+
+table(Seoul\(age,Seoul\)business)
+
+\end{document}
