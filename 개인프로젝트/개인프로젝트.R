@@ -16,6 +16,7 @@ View(f)
 dim(f)
 str(f)
 summary(f)
+f$h1503_7[f$h1503_7 <= 8 && f$h1503_7 > 3]
 
 # 변수명 바꾸기
 welfare = rename(f,
@@ -107,27 +108,18 @@ business = c('농업,임업 및 어업','광업','제조업',
              '예술,스포츠 및 여가관련 서비스업',
              '협회 및 단체, 수리 및 기타 개인 서비스업',
              '가구 내 고용활동 및 자가소비 생산활동','국제 및 외국기관')
+s = 1
+sorted = c(3,8,34,35,39,42,47,52,56,63,68,73,76,84,85,87,91,96,98,99)
+for (i in 1:99){
+  if (i > sorted[s]){
+    s = s+1
+    welfare$business[welfare$business == i] = business[s]
+  }
+  else{
+    welfare$business[welfare$business == i] = business[s]
+  }
+}
 
-welfare$business[welfare$business <= 3] = business[1]
-welfare$business[welfare$business <= 8] = business[2]
-welfare$business[welfare$business <= 34] = business[3]
-welfare$business[welfare$business <= 35] = business[4]
-welfare$business[welfare$business <= 39] = business[5]
-welfare$business[welfare$business <= 42] = business[6]
-welfare$business[welfare$business <= 47] = business[7]
-welfare$business[welfare$business <= 52] = business[8]
-welfare$business[welfare$business <= 56] = business[9]
-welfare$business[welfare$business <= 63] = business[10]
-welfare$business[welfare$business <= 68] = business[11]
-welfare$business[welfare$business <= 73] = business[12]
-welfare$business[welfare$business <= 76] = business[13]
-welfare$business[welfare$business <= 84] = business[14]
-welfare$business[welfare$business <= 85] = business[15]
-welfare$business[welfare$business <= 87] = business[16]
-welfare$business[welfare$business <= 91] = business[17]
-welfare$business[welfare$business <= 96] = business[18]
-welfare$business[welfare$business <= 98] = business[19]
-welfare$business[welfare$business <= 99] = business[20]
 
 # 필요하지 않은 데이터 제거
 welfare = welfare %>% filter(!working_ability == '근로 불가')
@@ -141,20 +133,32 @@ ggplot(data = welfare, aes(x = age,y = region)) + geom_boxplot()+ggtitle("전체 �
 # 전처리 완료
 
 
+# 각 업종의 지역별 연령 분포 산점도로 그리기
+for (i in 1:20){
+  # 업종
+  print('업종 : ')
+  print(business[i])
+  busin = welfare[welfare$business == business[i],]
+  
+  # 해당 업종에 종사하고 있는 인원
+  print('해당 업종에 종사하고 있는 인원')
+  print(table(busin$region))
+  
+  # 지역별 평균 연령대
+  print('지역별 평균 연령대')
+  aggre_busin = aggregate(busin$age,list(busin$region),mean)
+  print(aggre_busin)
+  
+  
+  gg = ggplot(data = busin, aes(x = region,y = age))+ geom_point(color = 'red') +
+    ggtitle(business[i],"지역별 연령 분포")+
+    theme(plot.title = element_text(family = "serif", face = "bold", hjust = 0.5, size = 15, color = "darkblue"))
+  print(gg+geom_line(data = aggre_busin,aes(x = Group.1, y = x),color = 'blue',group = 1))
+}
 
-# 농업,임업 및 어업의 연령별 업종 분포 산점도로 그리기
-agric = welfare[welfare$business == '농업,임업 및 어업',]
-gg = ggplot(data = agric, aes(x = region,y = age)) + geom_point(color = 'red')+ggtitle("농업,임업 및 어업의 연령별 업종 분포")+
-  theme(plot.title = element_text(family = "serif", face = "bold", hjust = 0.5, size = 15, color = "darkblue"))
-gg+geom_line(data = aggre_agric,aes(x = Group.1, y = x),color = 'blue')
 
 
-
-table(agric$region)
-mean(agric$age[agric$region == '광주/전남/전북/제주도'])
-aggre_agric = aggregate(agric$age,list(agric$region),mean)
-aggre_agric
-
+summary(welfare$age)
 
 ''' 
 관광데이터와 연관 가능
